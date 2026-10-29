@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { validateCopy } from "@/app/actions/copies";
 import { ActionForm } from "@/components/action-form";
+import { CopyAnalyzeCard } from "@/components/copy-analyze";
 import { CopyStatus } from "@/components/status";
 import { Badge, Card, Field, inputClass, PageTitle, PenScore } from "@/components/ui";
 import type { CopyAnalysis } from "@/lib/ai/schemas";
@@ -13,15 +14,17 @@ type FinalResult = { criteria: { criterion_id: string; points: number; comment: 
 export default async function CopyReviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { supabase } = await requireRole("teacher");
-  const { data: copy } = await supabase.from("copies").select("*, students(first_name,last_name), evaluations(id,title,total_points)").eq("id", id).single();
+  const { data: copy } = await supabase.from("copies").select("*, students(first_name,last_name), evaluations(id,title,total_points,status)").eq("id", id).single();
   if (!copy) notFound();
   const { data: criteria } = await supabase.from("criteria").select("id,label,expected,points").eq("evaluation_id", copy.evaluation_id).order("position");
   const urls = await signedUrls(supabase, copy.file_paths);
   const source = (copy.final_result ?? copy.ai_result) as (FinalResult & Partial<CopyAnalysis>) | null;
   const byId = new Map((source?.criteria ?? []).map((c) => [c.criterion_id, c]));
   const student = copy.students as { first_name: string; last_name: string };
-  const evaluation = copy.evaluations as { id: string; title: string; total_points: number };
+  const evaluation = copy.evaluations as { id: string; title: string; total_points: number; status: string };
   const locked = copy.status === "published";
+  // Copie déposée sans résultat d'IA : proposer l'analyse avant toute saisie
+  const canAnalyze = evaluation.status === "ready" && copy.file_paths.length > 0 && !copy.ai_result && ["uploaded", "error", "analyzing"].includes(copy.status);
 
   return (
     <>
@@ -49,8 +52,9 @@ export default async function CopyReviewPage({ params }: { params: Promise<{ id:
             </details>
           )}
         </Card>
-        <Card title={copy.status === "proposed" ? "Proposition de l'IA — à vérifier" : "Correction"}>
-          {copy.status === "error" && <p className="mb-4 rounded bg-pen-soft p-3 text-sm text-pen">Analyse impossible ({copy.error}). Vous pouvez corriger à la main ci-dessous.</p>}
+        <Card title={copy.status === "proposed" ? "Proposition de l'IA — à vérifier" : canAnalyze ? "Correction manuelle" : "Correction"}>
+          {canAnalyze && <CopyAnalyzeCard copyId={id} failed={copy.status === "error"} />}
+          {copy.status === "error" && copy.error && <p className="mb-4 rounded bg-pen-soft p-3 text-sm text-pen">Analyse impossible ({copy.error}).</p>}
           <ActionForm action={validateCopy.bind(null, id)} submitLabel={copy.status === "validated" ? "Mettre à jour" : "Valider la correction"}>
             {(criteria ?? []).map((c) => {
               const r = byId.get(c.id);
@@ -59,7 +63,7 @@ export default async function CopyReviewPage({ params }: { params: Promise<{ id:
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-sm font-medium">{c.label}</p>
                     <span className="flex items-center gap-1 text-sm">
-                      <input className={`${inputClass} w-20`} name={`points_${c.id}`} defaultValue={r?.points ?? ""} inputMode="decimal" disabled={locked} /> / {formatPoints(c.points)}
+                      <input className={`${inputClass} w-20`} name={`points_${c.id}`} defaultValue={r?.points ?? ""} inputMode="decimal" required pattern="[0-9]+([.,][05])?" title="Note entre 0 et le maximum, par demi-point" disabled={locked} /> / {formatPoints(c.points)}
                     </span>
                   </div>
                   <textarea className={inputClass} name={`comment_${c.id}`} defaultValue={r?.comment ?? ""} rows={2} disabled={locked} />

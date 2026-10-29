@@ -162,7 +162,7 @@ export default async function EvaluationPage({ params }: { params: Promise<{ id:
                               <td className="text-right">
                                 {copy && copy.file_paths.length > 0 && (
                                   <Link className="text-sm font-medium text-ink hover:text-pen" href={`/app/copies/${copy.id}`}>
-                                    {copy.status === "proposed" ? "Valider" : "Ouvrir"}
+                                    {copy.status === "proposed" ? "Valider" : ["uploaded", "error"].includes(copy.status) ? "Analyser" : "Ouvrir"}
                                   </Link>
                                 )}
                               </td>

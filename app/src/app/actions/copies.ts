@@ -99,6 +99,9 @@ export async function validateCopy(copyId: string, _: ActionState, formData: For
   if (copy.status === "published") return fail("Copie déjà publiée.");
   const { data: criteria } = await supabase.from("criteria").select("id,points,competency_id").eq("evaluation_id", copy.evaluation_id).order("position");
   if (!criteria?.length) return fail("Barème introuvable.");
+  // Un champ vide ne vaut pas 0 : chaque critère doit être noté explicitement
+  const missing = criteria.some((c) => !Number.isFinite(Number(String(formData.get(`points_${c.id}`) ?? "").trim().replace(",", ".") || NaN)));
+  if (missing) return fail("Saisissez une note pour chaque critère (0 si rien n'est réussi), ou lancez d'abord l'analyse.");
 
   const finalCriteria = criteria.map((c) => {
     const max = Number(c.points);
