@@ -7,3 +7,6 @@ out
 *.tsbuildinfo
 next-env.d.ts
 supabase/.temp
+
+# Copies d'élèves réelles : ne jamais versionner
+tests/fixtures/copie-*.html

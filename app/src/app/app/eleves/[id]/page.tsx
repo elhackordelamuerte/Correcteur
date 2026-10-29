@@ -52,12 +52,12 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
 
         <Card title="Copies">
           {copies?.length ? (
-            <ul className="divide-y divide-slate-100 text-sm">
+            <ul className="divide-y divide-line text-sm">
               {copies.map((c) => {
                 const e = c.evaluations as unknown as { title: string; total_points: number };
                 return (
                   <li key={c.id} className="flex items-center justify-between py-2">
-                    <Link className="text-brand-600 hover:underline" href={`/app/copies/${c.id}`}>{e.title}</Link>
+                    <Link className="text-pen hover:underline" href={`/app/copies/${c.id}`}>{e.title}</Link>
                     <span className="flex items-center gap-2"><CopyStatus status={c.status} />{c.score != null && `${formatPoints(c.score)} / ${formatPoints(e.total_points)}`}</span>
                   </li>
                 );
@@ -70,12 +70,12 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
 
         <Card title="Suivi dans le temps" actions={!hasExpertFeatures(account?.plan) && <Badge tone="blue">Expert</Badge>}>
           {!hasExpertFeatures(account?.plan) ? (
-            <p className="text-sm text-slate-600">L&apos;historique des observations est inclus dans le forfait Expert.</p>
+            <p className="text-sm text-ink-soft">L&apos;historique des observations est inclus dans le forfait Expert.</p>
           ) : history?.length ? (
             <ul className="space-y-1 text-sm">
               {history.map((h, i) => (
                 <li key={i} className="flex justify-between gap-2">
-                  <span>{formatDate(h.created_at)} · {(h.competencies as unknown as { label: string })?.label} <span className="text-slate-400">({h.source_type === "copy" ? "copie" : "exercice"})</span></span>
+                  <span>{formatDate(h.created_at)} · {(h.competencies as unknown as { label: string })?.label} <span className="text-ink-mute">({h.source_type === "copy" ? "copie" : "exercice"})</span></span>
                   <span>{STATUS_LABELS[statusFromRatio(Number(h.ratio))]} ({Math.round(Number(h.ratio) * 100)} %)</span>
                 </li>
               ))}
@@ -87,7 +87,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
 
         <Card title="Confidentialité & RGPD" className="lg:col-span-2">
           <div className="flex flex-wrap items-start gap-4">
-            <a className="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50" href={`/api/eleves/${id}/export`}>Exporter toutes ses données (JSON)</a>
+            <a className="rounded-lg border border-line-strong px-4 py-2 text-sm hover:bg-paper" href={`/api/eleves/${id}/export`}>Exporter toutes ses données (JSON)</a>
             <ActionForm action={eraseStudent.bind(null, id)} submitLabel="Effacer définitivement l'élève" variant="danger" confirm="Copies, analyses, compétences et profil seront supprimés définitivement. Continuer ?" />
           </div>
         </Card>

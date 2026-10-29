@@ -30,8 +30,8 @@ export function ActionForm({ action, submitLabel, pendingLabel = "En cours…", 
         <Button type="submit" variant={variant} disabled={pending}>
           {pending ? pendingLabel : submitLabel}
         </Button>
-        {state?.error && <p className="text-sm text-red-700" role="alert">{state.error}</p>}
-        {state?.ok && <p className="text-sm text-emerald-700" role="status">{state.ok}</p>}
+        {state?.error && <p className="text-sm text-pen" role="alert">{state.error}</p>}
+        {state?.ok && <p className="text-sm text-sage" role="status">{state.ok}</p>}
       </div>
     </form>
   );

@@ -27,7 +27,7 @@ export class AiError extends Error {}
 const callGemini: RawCall = async (system, prompt, attachments, temperature) => {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new AiError("GEMINI_API_KEY absente");
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
   const parts = [
     { text: prompt },
     ...attachments.map((a) => ({ inlineData: { mimeType: a.mimeType, data: a.base64 } })),
@@ -60,7 +60,7 @@ const callGemini: RawCall = async (system, prompt, attachments, temperature) => 
 const callOpenRouter: RawCall = async (system, prompt, attachments, temperature) => {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new AiError("OPENROUTER_API_KEY absente");
-  const model = process.env.OPENROUTER_MODEL || "google/gemini-2.5-flash";
+  const model = process.env.OPENROUTER_MODEL || "google/gemini-3.8-flash";
   const content = [
     { type: "text", text: prompt },
     ...attachments.map((a, i) =>

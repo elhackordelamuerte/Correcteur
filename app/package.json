@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:lan": "next dev --experimental-https -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
     "test": "vitest run",
-    "test:db": "node tests/db/rls.mjs"
+    "test:db": "node tests/db/rls.mjs",
+    "check:supabase": "node --env-file=.env.local scripts/check-supabase.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -10,8 +10,28 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Serveur de développement uniquement (ignoré en production / sur Vercel) : autorise 127.0.0.1
+  // et les adresses du réseau local, pour tester la page de scan depuis un téléphone en Wi-Fi.
+  // « * » remplace exactement un segment de l'adresse.
+  allowedDevOrigins: [
+    "127.0.0.1",
+    "192.168.*.*",
+    "10.*.*.*",
+    ...Array.from({ length: 16 }, (_, i) => `172.${16 + i}.*.*`),
+    "*.local",
+  ],
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Le service worker doit toujours être relu, pour que ses mises à jour s'appliquent
+      {
+        source: "/sw.js",
+        headers: [
+          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+        ],
+      },
+    ];
   },
 };
 

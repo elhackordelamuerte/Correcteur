@@ -2,13 +2,14 @@ import Link from "next/link";
 import { joinClass } from "@/app/actions/student-space";
 import { ActionForm } from "@/components/action-form";
 import { CompetencyBadge } from "@/components/status";
-import { Badge, Card, Empty, Field, inputClass } from "@/components/ui";
+import { Badge, Card, Empty, Field, inputClass, PenScore } from "@/components/ui";
 import { requireRole } from "@/lib/auth";
 import { aggregateStatus } from "@/lib/rules";
-import { formatDate, formatPoints } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 
 export default async function StudentHome() {
-  const { supabase } = await requireRole("student");
+  const { supabase, user, profile } = await requireRole("student");
+  const pendingCode = typeof user.user_metadata?.join_code === "string" ? user.user_metadata.join_code : "";
   const { data: me } = await supabase.from("students").select("id, classes(name,subject)");
   const [{ data: copies }, { data: assignments }, { data: appreciations }, { data: obs }] = await Promise.all([
     supabase.from("copies").select("id,score,published_at,evaluations(title,total_points)").eq("status", "published").order("published_at", { ascending: false }),
@@ -26,11 +27,11 @@ export default async function StudentHome() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Salut 👋</h1>
+      <h1 className="animate-rise font-display text-4xl font-medium tracking-tight">Salut {profile.display_name.split(" ")[0]}<span className="text-pen">.</span></h1>
       {(me ?? []).length === 0 ? (
         <Card title="Rejoindre ta classe">
           <ActionForm action={joinClass} submitLabel="Rejoindre">
-            <Field label="Code classe (donné par ton prof)"><input className={`${inputClass} font-mono uppercase tracking-widest`} name="code" maxLength={6} required /></Field>
+            <Field label="Code classe (donné par ton prof)"><input className={`${inputClass} font-mono uppercase tracking-widest`} name="code" maxLength={6} required defaultValue={pendingCode} /></Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Prénom"><input className={inputClass} name="first_name" required /></Field>
               <Field label="Nom"><input className={inputClass} name="last_name" required /></Field>
@@ -38,20 +39,20 @@ export default async function StudentHome() {
           </ActionForm>
         </Card>
       ) : (
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-ink-soft">
           Tes classes : {(me ?? []).map((s) => (s.classes as unknown as { name: string })?.name).join(", ")}
         </p>
       )}
 
       <Card title="Tes résultats">
         {copies?.length ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-line">
             {copies.map((c) => {
               const e = c.evaluations as unknown as { title: string; total_points: number };
               return (
                 <li key={c.id} className="flex items-center justify-between py-3">
-                  <Link href={`/eleve/copies/${c.id}`} className="text-brand-600 hover:underline">{e.title}</Link>
-                  <span className="text-sm">{formatPoints(c.score)} / {formatPoints(e.total_points)} · {formatDate(c.published_at)}</span>
+                  <Link href={`/eleve/copies/${c.id}`} className="font-medium hover:text-pen">{e.title}</Link>
+                  <span className="flex items-center gap-2 text-xs text-ink-mute">{formatDate(c.published_at)} <PenScore score={c.score} total={e.total_points} /></span>
                 </li>
               );
             })}
@@ -63,12 +64,12 @@ export default async function StudentHome() {
 
       <Card title="Tes exercices">
         {assignments?.length ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-line">
             {assignments.map((a) => {
               const ex = a.exercises as unknown as { title: string; difficulty: number };
               return (
                 <li key={a.id} className="flex items-center justify-between py-3">
-                  <Link href={`/eleve/exercices/${a.id}`} className="text-brand-600 hover:underline">{ex.title}</Link>
+                  <Link href={`/eleve/exercices/${a.id}`} className="font-medium hover:text-pen">{ex.title}</Link>
                   {a.status === "assigned" ? <Badge tone="amber">À faire</Badge> : a.status === "submitted" ? <Badge>Envoyé</Badge> : <Badge tone="green">Corrigé</Badge>}
                 </li>
               );
@@ -91,7 +92,7 @@ export default async function StudentHome() {
 
       {(appreciations ?? []).map((a, i) => (
         <Card key={i} title="Le mot de ton prof">
-          <p className="italic text-slate-700">« {a.text} »</p>
+          <p className="italic text-ink">« {a.text} »</p>
         </Card>
       ))}
     </div>

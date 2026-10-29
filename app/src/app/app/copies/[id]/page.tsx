@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { validateCopy } from "@/app/actions/copies";
 import { ActionForm } from "@/components/action-form";
 import { CopyStatus } from "@/components/status";
-import { Badge, Card, Field, inputClass, PageTitle } from "@/components/ui";
+import { Badge, Card, Field, inputClass, PageTitle, PenScore } from "@/components/ui";
 import type { CopyAnalysis } from "@/lib/ai/schemas";
 import { requireRole } from "@/lib/auth";
 import { formatPoints } from "@/lib/format";
@@ -35,7 +35,7 @@ export default async function CopyReviewPage({ params }: { params: Promise<{ id:
           <div className="space-y-3">
             {urls.map((url, i) =>
               copy.file_paths[i]?.endsWith(".pdf") ? (
-                <a key={url} href={url} target="_blank" rel="noreferrer" className="text-brand-600 underline">Ouvrir le PDF (page {i + 1})</a>
+                <a key={url} href={url} target="_blank" rel="noreferrer" className="text-pen underline">Ouvrir le PDF (page {i + 1})</a>
               ) : (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img key={url} src={url} alt={`Page ${i + 1}`} className="w-full rounded border" />
@@ -44,18 +44,18 @@ export default async function CopyReviewPage({ params }: { params: Promise<{ id:
           </div>
           {copy.transcription && (
             <details className="mt-4 text-sm">
-              <summary className="cursor-pointer text-slate-600">Transcription (analyse approfondie)</summary>
+              <summary className="cursor-pointer text-ink-soft">Transcription (analyse approfondie)</summary>
               <p className="prose-copia mt-2">{copy.transcription}</p>
             </details>
           )}
         </Card>
         <Card title={copy.status === "proposed" ? "Proposition de l'IA — à vérifier" : "Correction"}>
-          {copy.status === "error" && <p className="mb-4 rounded bg-red-50 p-3 text-sm text-red-800">Analyse impossible ({copy.error}). Vous pouvez corriger à la main ci-dessous.</p>}
+          {copy.status === "error" && <p className="mb-4 rounded bg-pen-soft p-3 text-sm text-pen">Analyse impossible ({copy.error}). Vous pouvez corriger à la main ci-dessous.</p>}
           <ActionForm action={validateCopy.bind(null, id)} submitLabel={copy.status === "validated" ? "Mettre à jour" : "Valider la correction"}>
             {(criteria ?? []).map((c) => {
               const r = byId.get(c.id);
               return (
-                <div key={c.id} className="space-y-2 rounded-lg border border-slate-200 p-3">
+                <div key={c.id} className="space-y-2 rounded-lg border border-line p-3">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-sm font-medium">{c.label}</p>
                     <span className="flex items-center gap-1 text-sm">
@@ -69,7 +69,7 @@ export default async function CopyReviewPage({ params }: { params: Promise<{ id:
             <Field label="Retour général à l'élève">
               <textarea className={inputClass} name="general_comment" defaultValue={source?.general_comment ?? ""} rows={4} disabled={locked} />
             </Field>
-            {locked && <p className="text-sm text-slate-600">Copie publiée : {formatPoints(copy.score)} / {formatPoints(evaluation.total_points)}.</p>}
+            {copy.score != null && <div className="pt-2"><PenScore score={copy.score} total={evaluation.total_points} size="lg" /></div>}
           </ActionForm>
         </Card>
       </div>

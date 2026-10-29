@@ -16,9 +16,9 @@ export default async function StudentExercisePage({ params }: { params: Promise<
       <div className="space-y-4">
         <Card><p className="prose-copia">{ex.statement}</p></Card>
         {ex.hints.map((h, i) => (
-          <details key={i} className="rounded-xl border border-slate-200 bg-white p-4">
-            <summary className="cursor-pointer font-medium text-brand-600">Indice {i + 1}</summary>
-            <p className="mt-2 text-slate-700">{h}</p>
+          <details key={i} className="rounded-xl border border-line bg-sheet p-4">
+            <summary className="cursor-pointer font-medium text-pen">Indice {i + 1}</summary>
+            <p className="mt-2 text-ink">{h}</p>
           </details>
         ))}
         {a.status === "assigned" ? (
@@ -29,11 +29,11 @@ export default async function StudentExercisePage({ params }: { params: Promise<
           </Card>
         ) : (
           <Card title="Ta réponse">
-            <p className="prose-copia rounded bg-slate-50 p-3">{a.answer}</p>
+            <p className="prose-copia rounded bg-paper p-3">{a.answer}</p>
             {a.status === "corrected" ? (
-              <p className="mt-3 text-slate-700"><strong>Retour :</strong> {a.feedback}</p>
+              <p className="mt-3 text-ink"><strong>Retour :</strong> {a.feedback}</p>
             ) : (
-              <p className="mt-3 text-sm text-slate-500">Envoyé. Ton prof va le corriger.</p>
+              <p className="mt-3 text-sm text-ink-mute">Envoyé. Ton prof va le corriger.</p>
             )}
           </Card>
         )}

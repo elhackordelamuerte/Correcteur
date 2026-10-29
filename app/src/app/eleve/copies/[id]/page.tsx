@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Card, PageTitle } from "@/components/ui";
+import { Card, PageTitle, PenScore } from "@/components/ui";
 import { requireRole } from "@/lib/auth";
 import { formatPoints } from "@/lib/format";
 
@@ -18,15 +18,15 @@ export default async function StudentCopyPage({ params }: { params: Promise<{ id
 
   return (
     <>
-      <PageTitle title={e.title} subtitle={`${formatPoints(copy.score)} / ${formatPoints(e.total_points)}`} back={{ href: "/eleve", label: "Accueil" }} />
+      <PageTitle title={e.title} subtitle={<div className="pt-3"><PenScore score={copy.score} total={e.total_points} size="lg" /></div>} back={{ href: "/eleve", label: "Accueil" }} />
       <div className="space-y-4">
-        {result.general_comment && <Card><p className="text-slate-700">{result.general_comment}</p></Card>}
+        {result.general_comment && <Card><p className="text-ink">{result.general_comment}</p></Card>}
         {(criteria ?? []).map((c) => {
           const r = byId.get(c.id);
           return (
             <Card key={c.id}>
               <div className="flex justify-between gap-2 font-medium"><span>{c.label}</span><span>{formatPoints(r?.points ?? 0)} / {formatPoints(c.points)}</span></div>
-              {r?.comment && <p className="mt-2 text-sm text-slate-600">{r.comment}</p>}
+              {r?.comment && <p className="mt-2 text-sm text-ink-soft">{r.comment}</p>}
             </Card>
           );
         })}

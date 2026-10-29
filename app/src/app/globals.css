@@ -1,20 +1,74 @@
 @import "tailwindcss";
 
+/* Direction « Cahier corrigé » : papier, encre, un seul rouge — celui du stylo correcteur */
 @theme {
-  --color-brand-50: #eef6ff;
-  --color-brand-100: #d9eaff;
-  --color-brand-500: #2f6fed;
-  --color-brand-600: #1f57c8;
-  --color-brand-700: #1a469f;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-paper: #f7f4ee;
+  --color-sheet: #fffdf9;
+  --color-ink: #1c1a17;
+  --color-ink-soft: #57524a;
+  --color-ink-mute: #8c867c;
+  --color-line: #e6e0d4;
+  --color-line-strong: #d4ccbc;
+
+  --color-pen: #c8361d;
+  --color-pen-soft: #fbe9e4;
+  --color-ochre: #b7791f;
+  --color-ochre-soft: #f8eedb;
+  --color-sage: #4f7a5a;
+  --color-sage-soft: #e7f0e8;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-instrument), "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --animate-rise: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-paper font-sans text-ink antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Grain de papier très léger, sans image externe */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background-image: radial-gradient(rgb(28 26 23 / 0.05) 0.6px, transparent 0.6px);
+  background-size: 3px 3px;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: var(--color-pen-soft);
+  color: var(--color-pen);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-pen);
+  outline-offset: 2px;
 }
 
 .prose-copia {
-  @apply whitespace-pre-wrap leading-relaxed text-slate-800;
+  @apply whitespace-pre-wrap leading-relaxed text-ink-soft;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 @media print {
@@ -23,5 +77,8 @@ body {
   }
   body {
     background: white;
+  }
+  body::before {
+    display: none;
   }
 }

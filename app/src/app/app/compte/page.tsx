@@ -29,23 +29,23 @@ export default async function AccountPage() {
       <PageTitle title="Compte & crédits" subtitle="Un crédit, c'est une action de l'IA. Ce que vous faites à la main ne coûte rien." />
       <div className="grid gap-6 lg:grid-cols-3">
         <Card title="Solde">
-          <p className="text-4xl font-bold text-brand-700">{(account?.included_balance ?? 0) + (account?.purchased_balance ?? 0)}</p>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="text-4xl font-display italic text-ink">{(account?.included_balance ?? 0) + (account?.purchased_balance ?? 0)}</p>
+          <p className="mt-2 text-sm text-ink-soft">
             {account?.included_balance} inclus (remis à {account?.included_credits} chaque mois) + {account?.purchased_balance} achetés ou restitués.
           </p>
-          {account?.plan === "trial" && <p className="mt-2 text-sm text-slate-600">Essai jusqu&apos;au {formatDate(account.trial_ends_at)}.</p>}
+          {account?.plan === "trial" && <p className="mt-2 text-sm text-ink-soft">Essai jusqu&apos;au {formatDate(account.trial_ends_at)}.</p>}
         </Card>
         <Card title="Forfaits" className="lg:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
             {PLANS.map((p) => (
-              <div key={p.name} className="rounded-lg border border-slate-200 p-4">
+              <div key={p.name} className="rounded-lg border border-line p-4">
                 <p className="font-semibold">{p.name}</p>
                 <p className="text-sm">{p.price} · {p.credits} crédits / mois</p>
-                <p className="text-xs text-slate-500">{p.classes}</p>
+                <p className="text-xs text-ink-mute">{p.classes}</p>
               </div>
             ))}
           </div>
-          <p className="mt-4 text-sm text-slate-500">Paiement en ligne : à brancher sur Stripe (voir le README). Les recharges ne sont pas encore disponibles.</p>
+          <p className="mt-4 text-sm text-ink-mute">Paiement en ligne : à brancher sur Stripe (voir le README). Les recharges ne sont pas encore disponibles.</p>
         </Card>
         <Card title="Coût des actions">
           <ul className="space-y-1 text-sm">
@@ -55,11 +55,11 @@ export default async function AccountPage() {
           </ul>
         </Card>
         <Card title="Historique" className="lg:col-span-2">
-          <ul className="max-h-96 divide-y divide-slate-100 overflow-y-auto text-sm">
+          <ul className="max-h-96 divide-y divide-line overflow-y-auto text-sm">
             {(ledger ?? []).map((l) => (
               <li key={l.id} className="flex justify-between py-1.5">
                 <span>{formatDate(l.created_at)} · {l.reason}</span>
-                <span className={l.delta < 0 ? "text-slate-700" : "text-emerald-700"}>{l.delta > 0 ? `+${l.delta}` : l.delta}</span>
+                <span className={l.delta < 0 ? "text-ink" : "text-sage"}>{l.delta > 0 ? `+${l.delta}` : l.delta}</span>
               </li>
             ))}
           </ul>

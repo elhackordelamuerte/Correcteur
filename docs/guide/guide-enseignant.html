@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide Copia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Guide d'utilisation de Copia — même charte que l'application : papier, encre, rouge du correcteur */
+:root {
+  --paper: #f7f4ee;
+  --sheet: #fffdf9;
+  --ink: #1c1a17;
+  --ink-soft: #4a463f;
+  --ink-mute: #7d776c;
+  --line: #e6e0d4;
+  --pen: #c8361d;
+  --pen-soft: #fbe9e4;
+  --ochre: #94600f;
+  --ochre-soft: #f8eedb;
+  --sage: #3f6a4a;
+  --sage-soft: #e7f0e8;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --text: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 19px/1.65 var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--pen); outline-offset: 3px; }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.text { max-width: 760px; }
+
+/* En-tête */
+.hero { padding: 56px 0 40px; border-bottom: 1px solid var(--line); }
+.logo { font: italic 500 30px var(--display); text-decoration: none; }
+.logo span, .dot { color: var(--pen); }
+.hero h1 { font: 500 clamp(40px, 6vw, 68px)/1.04 var(--display); letter-spacing: -0.02em; margin: 36px 0 18px; }
+.hero h1 em { color: var(--pen); }
+.hero .lead { font-size: 22px; color: var(--ink-soft); max-width: 680px; margin: 0; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: var(--sheet); border: 1px solid var(--line); font-size: 16px; }
+.print { font: inherit; font-size: 16px; cursor: pointer; padding: 8px 18px; border-radius: 999px; border: 1px solid var(--ink); background: var(--ink); color: var(--sheet); }
+
+/* Sommaire */
+.toc { padding: 44px 0; border-bottom: 1px solid var(--line); }
+.toc h2 { font: 500 28px var(--display); margin: 0 0 20px; }
+.toc ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.toc a { display: flex; gap: 14px; align-items: center; padding: 14px 18px; background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; text-decoration: none; min-height: 64px; transition: border-color .15s; }
+.toc a:hover { border-color: var(--ink); }
+.toc .n { font: italic 500 26px var(--display); color: var(--pen); min-width: 34px; }
+
+/* Blocs pédagogiques */
+.box { border-radius: 14px; padding: 18px 22px; margin: 22px 0; border: 1px solid; }
+.box strong:first-child { display: block; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+.box p { margin: 0; }
+.tip { background: var(--sage-soft); border-color: #c5d9c9; color: #23412c; }
+.warn { background: var(--ochre-soft); border-color: #ecd6ae; color: #5c3c08; }
+.key { background: var(--pen-soft); border-color: #f1c7bc; color: #7a1f0f; }
+
+/* Sections */
+section.step { padding: 64px 0; border-bottom: 1px solid var(--line); }
+.step-head { display: flex; gap: 22px; align-items: baseline; margin-bottom: 8px; }
+.step-num { font: italic 500 64px/1 var(--display); color: var(--pen); }
+.step h2 { font: 500 clamp(30px, 4vw, 42px)/1.1 var(--display); letter-spacing: -0.01em; margin: 0; }
+.step .goal { font-size: 21px; color: var(--ink-soft); margin: 10px 0 28px; }
+.step h3 { font: 500 25px var(--display); margin: 44px 0 6px; }
+
+/* Consignes numérotées alignées sur les repères des captures */
+ol.how { list-style: none; padding: 0; margin: 18px 0; counter-reset: how; }
+ol.how li { position: relative; padding: 10px 0 10px 56px; min-height: 48px; }
+ol.how li .pin { position: absolute; left: 0; top: 8px; }
+
+/* Captures annotées */
+figure.shot { margin: 26px 0 8px; }
+.frame { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--sheet); box-shadow: 0 24px 50px -32px rgb(28 26 23 / .45); cursor: zoom-in; }
+.frame img { width: 100%; }
+figure.shot figcaption { font-size: 16px; color: var(--ink-mute); margin-top: 10px; }
+figure.narrow { max-width: 420px; }
+.pin {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--pen); color: #fff; font: 600 19px/1 var(--text);
+  box-shadow: 0 0 0 4px #fff, 0 4px 14px rgb(200 54 29 / .45);
+}
+.frame .pin { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); }
+
+/* Téléphone */
+.phone { width: 300px; border: 12px solid var(--ink); border-radius: 38px; padding: 26px 10px 30px; background: var(--paper); box-shadow: 0 24px 50px -28px rgb(28 26 23 / .55); }
+.phone img { border-radius: 6px; }
+.duo { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: center; }
+
+/* Lexique */
+dl.glossary { display: grid; grid-template-columns: 210px 1fr; gap: 14px 24px; margin: 24px 0 0; }
+dl.glossary dt { font: 500 22px var(--display); }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* Questions fréquentes */
+details.faq { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; margin: 12px 0; }
+details.faq summary { cursor: pointer; padding: 18px 22px; font-weight: 600; list-style: none; display: flex; gap: 12px; }
+details.faq summary::before { content: "+"; color: var(--pen); font-weight: 600; width: 16px; }
+details.faq[open] summary::before { content: "–"; }
+details.faq div { padding: 0 22px 20px 50px; color: var(--ink-soft); }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 0; list-style: none; }
+.rules li { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+.rules b { display: block; font: 500 22px var(--display); margin-bottom: 6px; }
+
+footer { padding: 40px 0 70px; color: var(--ink-mute); font-size: 16px; }
+
+/* Agrandissement des images */
+dialog.zoom { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 94vh; }
+dialog.zoom::backdrop { background: rgb(28 26 23 / .82); }
+dialog.zoom img { max-width: 96vw; max-height: 86vh; border-radius: 10px; }
+dialog.zoom button { display: block; margin: 14px auto 0; font: inherit; padding: 10px 26px; border-radius: 999px; border: 0; background: var(--sheet); cursor: pointer; }
+
+@media (max-width: 760px) {
+  body { font-size: 18px; }
+  .duo { grid-template-columns: 1fr; }
+  .phone { margin: 0 auto; }
+  dl.glossary { grid-template-columns: 1fr; gap: 4px; }
+  dl.glossary dd { margin-bottom: 14px; }
+  .pin { width: 30px; height: 30px; font-size: 15px; }
+  .step-num { font-size: 48px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media print {
+  body { background: #fff; font-size: 13pt; }
+  .print, .toc, dialog { display: none !important; }
+  section.step { break-before: page; padding: 0; border: 0; }
+  .frame { box-shadow: none; break-inside: avoid; }
+  details.faq div { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="logo">Copia<span>.</span></span>
+    <h1>Corriger avec Copia,<br><em>pas à pas.</em></h1>
+    <p class="lead">Ce guide vous accompagne de la création de votre compte jusqu'à la publication des notes. Aucune compétence en informatique n'est nécessaire : chaque étape tient en quelques clics, et chaque écran est montré tel que vous le verrez.</p>
+    <div class="hero-meta">
+      <span class="chip">⏱ Environ 20 minutes</span>
+      <span class="chip">💻 Un ordinateur et une adresse e-mail</span>
+      <span class="chip">📱 Un téléphone (facultatif)</span>
+      <button class="print" onclick="window.print()">Imprimer ce guide</button>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sommaire">
+  <div class="wrap">
+    <h2>Sommaire</h2>
+    <ol>
+      <li><a href="#avant"><span class="n">0</span>Avant de commencer</a></li>
+      <li><a href="#compte"><span class="n">1</span>Créer son compte et se connecter</a></li>
+      <li><a href="#accueil"><span class="n">2</span>Se repérer sur le tableau de bord</a></li>
+      <li><a href="#classe"><span class="n">3</span>Créer une classe</a></li>
+      <li><a href="#eleves"><span class="n">4</span>Ajouter ses élèves</a></li>
+      <li><a href="#evaluation"><span class="n">5</span>Préparer une évaluation et son barème</a></li>
+      <li><a href="#copies"><span class="n">6</span>Déposer les copies</a></li>
+      <li><a href="#valider"><span class="n">7</span>Vérifier, valider, publier</a></li>
+      <li><a href="#suivi"><span class="n">8</span>Suivre les élèves et les faire progresser</a></li>
+      <li><a href="#eleve"><span class="n">9</span>Ce que voient vos élèves</a></li>
+      <li><a href="#credits"><span class="n">10</span>Comprendre les crédits</a></li>
+      <li><a href="#aide"><span class="n">?</span>En cas de souci</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main>
+
+<!-- 0 -->
+<section class="step" id="avant">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">0</span><h2>Avant de commencer</h2></div>
+    <p class="goal text">Quelques mots pour lire ce guide sereinement.</p>
+
+    <div class="text">
+      <p>Sur chaque image, des <strong>pastilles rouges numérotées</strong> montrent où regarder ou cliquer. Le texte sous l'image reprend les mêmes numéros, dans l'ordre :</p>
+      <ol class="how">
+        <li><span class="pin">1</span>Je regarde la pastille <strong>1</strong> sur l'image…</li>
+        <li><span class="pin">2</span>… puis je lis la consigne <strong>2</strong>, et ainsi de suite.</li>
+      </ol>
+      <div class="tip box"><strong>Astuce</strong><p>Cliquez sur n'importe quelle image pour l'afficher en grand. Appuyez sur la touche <kbd>Échap</kbd> ou sur « Fermer » pour revenir au guide.</p></div>
+
+      <h3>Les mots du guide</h3>
+      <dl class="glossary">
+        <dt>Bouton</dt><dd>Une forme arrondie avec un texte, par exemple « Se connecter ». On clique dessus pour lancer une action.</dd>
+        <dt>Champ</dt><dd>Un rectangle blanc dans lequel on écrit : on clique dedans, puis on tape au clavier.</dd>
+        <dt>Barème</dt><dd>La liste des critères de notation et des points de chacun. Copia corrige toujours selon <em>votre</em> barème.</dd>
+        <dt>Proposition de l'IA</dt><dd>Une correction préparée par l'ordinateur. Ce n'est qu'un brouillon : rien n'est définitif tant que vous ne l'avez pas validé.</dd>
+        <dt>Publier</dt><dd>Rendre une copie corrigée visible par l'élève. C'est toujours vous qui décidez du moment.</dd>
+        <dt>Crédit</dt><dd>L'unité qui « paie » une action de l'IA. Tout ce que vous faites à la main est gratuit.</dd>
+        <dt>QR code</dt><dd>Un carré de petits motifs noirs. On le vise avec l'appareil photo d'un téléphone pour ouvrir une page, sans rien taper.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 1 -->
+<section class="step" id="compte">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">1</span><h2>Créer son compte et se connecter</h2></div>
+    <p class="goal text">Une seule fois : vous créez votre compte, vous confirmez votre adresse e-mail, puis vous vous connectez.</p>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/01-accueil.jpg" alt="Page d'accueil de Copia avec les boutons Essai gratuit et Connexion en haut à droite">
+        <span class="pin" style="--x:89%;--y:11.5%">1</span>
+        <span class="pin" style="--x:80%;--y:11.5%">2</span>
+      </div>
+      <figcaption>La page d'accueil de Copia.</figcaption>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Première visite ? Cliquez sur <strong>« Essai gratuit »</strong> : 14 jours, sans carte bancaire.</li>
+      <li><span class="pin">2</span>Vous avez déjà un compte ? Cliquez sur <strong>« Connexion »</strong>.</li>
+    </ol>
+
+    <h3>Créer son compte</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/02-inscription.jpg" alt="Formulaire de création de compte : nom affiché, adresse e-mail, mot de passe et bouton Créer mon compte">
+        <span class="pin" style="--x:55.5%;--y:41%">1</span>
+        <span class="pin" style="--x:55.5%;--y:51%">2</span>
+        <span class="pin" style="--x:55.5%;--y:61%">3</span>
+        <span class="pin" style="--x:55.5%;--y:71%">4</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Écrivez votre nom tel que vous souhaitez le voir, par exemple « Claire Moreau ».</li>
+      <li><span class="pin">2</span>Écrivez votre adresse e-mail.</li>
+      <li><span class="pin">3</span>Choisissez un mot de passe d'au moins 8 caractères. Notez-le dans un endroit sûr.</li>
+      <li><span class="pin">4</span>Cliquez sur <strong>« Créer mon compte »</strong>.</li>
+    </ol>
+    <div class="key box text"><strong>Important</strong><p>Copia vous envoie aussitôt un e-mail. Ouvrez votre messagerie et <strong>cliquez sur le lien</strong> qu'il contient : c'est ce qui active votre compte. Pensez à regarder dans les « courriers indésirables » si vous ne le voyez pas.</p></div>
+
+    <h3>Se connecter</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/03-connexion.jpg" alt="Page de connexion avec les champs adresse e-mail et mot de passe">
+        <span class="pin" style="--x:55.5%;--y:44%">1</span>
+        <span class="pin" style="--x:55.5%;--y:54.3%">2</span>
+        <span class="pin" style="--x:55.5%;--y:61.4%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Votre adresse e-mail.</li>
+      <li><span class="pin">2</span>Votre mot de passe. Les caractères s'affichent sous forme de points : c'est normal.</li>
+      <li><span class="pin">3</span>Cliquez sur <strong>« Se connecter »</strong>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="step" id="accueil">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">2</span><h2>Se repérer sur le tableau de bord</h2></div>
+    <p class="goal text">C'est la première page après la connexion. Vous pouvez toujours y revenir en cliquant sur « Tableau de bord », en haut à gauche.</p>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/04-tableau-de-bord.jpg" alt="Tableau de bord : menu à gauche, copies à valider, cartes des classes et solde de crédits">
+        <span class="pin" style="--x:17%;--y:27.5%">1</span>
+        <span class="pin" style="--x:22%;--y:29.9%">2</span>
+        <span class="pin" style="--x:22%;--y:49.9%">3</span>
+        <span class="pin" style="--x:72.3%;--y:49.4%">4</span>
+        <span class="pin" style="--x:18.6%;--y:79.5%">5</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span><strong>Le menu de gauche</strong> liste vos classes. Il reste affiché sur toutes les pages : cliquez sur une classe pour l'ouvrir.</li>
+      <li><span class="pin">2</span><strong>« Sur votre bureau »</strong> rassemble les copies qui attendent votre vérification. Le chiffre rouge indique combien il en reste.</li>
+      <li><span class="pin">3</span><strong>Vos classes</strong>, chacune sur sa fiche, avec le nombre d'élèves et le code de la classe.</li>
+      <li><span class="pin">4</span>Le cadre <strong>« Nouvelle classe »</strong> pour en créer une (étape suivante).</li>
+      <li><span class="pin">5</span><strong>Vos crédits</strong> restants. La barre se vide au fil de l'utilisation de l'IA.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="step" id="classe">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">3</span><h2>Créer une classe</h2></div>
+    <p class="goal text">Dans le cadre « Nouvelle classe » du tableau de bord (pastille 4 ci-dessus) :</p>
+    <ol class="how text">
+      <li><span class="pin">1</span>Écrivez le nom de la classe, par exemple « 4e B ».</li>
+      <li><span class="pin">2</span>Si vous le souhaitez, précisez le niveau et la matière.</li>
+      <li><span class="pin">3</span>Cliquez sur <strong>« Créer la classe »</strong>. Elle apparaît aussitôt dans le menu de gauche.</li>
+    </ol>
+
+    <h3>La page d'une classe</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/05-classe.jpg" alt="Page de la classe 4e B : code de classe en rouge, chiffres clés et liste des élèves">
+        <span class="pin" style="--x:78.4%;--y:10.5%">1</span>
+        <span class="pin" style="--x:23.8%;--y:30%">2</span>
+        <span class="pin" style="--x:76.8%;--y:40.5%">3</span>
+        <span class="pin" style="--x:89%;--y:40.5%">4</span>
+        <span class="pin" style="--x:23.8%;--y:60%">5</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span><strong>Le code de la classe</strong>, comme un tampon rouge. Vos élèves s'en servent pour rejoindre la classe.</li>
+      <li><span class="pin">2</span>Les chiffres clés : nombre d'élèves, d'évaluations, et d'élèves ayant créé leur compte.</li>
+      <li><span class="pin">3</span><strong>« Inviter »</strong> : pour que les élèves créent eux-mêmes leur compte.</li>
+      <li><span class="pin">4</span><strong>« + Ajouter des élèves »</strong> : pour remplir la liste vous-même (étape suivante).</li>
+      <li><span class="pin">5</span>La liste des élèves, par ordre alphabétique.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="step" id="eleves">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">4</span><h2>Ajouter ses élèves</h2></div>
+    <p class="goal text">Cliquez sur <strong>« + Ajouter des élèves »</strong>. Un panneau s'ouvre sur la droite, avec trois façons de faire. Choisissez celle qui vous convient.</p>
+
+    <h3>Façon n° 1 : coller la liste de la classe (la plus rapide)</h3>
+    <p class="text">Idéal si vous avez la liste dans Pronote, un tableur ou un document : sélectionnez les noms, copiez-les (<kbd>Ctrl</kbd> + <kbd>C</kbd>, ou <kbd>⌘</kbd> + <kbd>C</kbd> sur Mac), puis collez-les ici (<kbd>Ctrl</kbd> + <kbd>V</kbd>, ou <kbd>⌘</kbd> + <kbd>V</kbd>).</p>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/07-coller-liste.jpg" alt="Panneau Coller une liste : la liste collée en haut, l'aperçu en dessous avec deux élèves déjà présents, et le bouton Importer 3 élèves">
+        <span class="pin" style="--x:52.6%;--y:26%">1</span>
+        <span class="pin" style="--x:52.6%;--y:61%">2</span>
+        <span class="pin" style="--x:87.5%;--y:49.7%">3</span>
+        <span class="pin" style="--x:52.6%;--y:81.6%">4</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Collez la liste dans le grand champ, un élève par ligne. « MARTIN Léa », « Léa Martin » ou les colonnes d'un tableur conviennent.</li>
+      <li><span class="pin">2</span>Copia remet chaque nom en forme dans <strong>l'aperçu</strong>. Vérifiez-le : vous pouvez corriger un nom en cliquant dessus, inverser prénom et nom avec <strong>⇄</strong>, ou retirer une ligne avec <strong>✕</strong>.</li>
+      <li><span class="pin">3</span>Les élèves <strong>« déjà présents »</strong> dans la classe sont repérés et ne seront pas ajoutés deux fois.</li>
+      <li><span class="pin">4</span>Cliquez sur <strong>« Importer… »</strong>. Le bouton indique le nombre d'élèves ajoutés.</li>
+    </ol>
+
+    <h3>Façon n° 2 : un par un</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/08-un-par-un.jpg" alt="Onglet Un par un : champs Prénom et Nom, deux élèves en attente et bouton Enregistrer 2 élèves">
+        <span class="pin" style="--x:52.6%;--y:22.8%">1</span>
+        <span class="pin" style="--x:52.6%;--y:29.8%">2</span>
+        <span class="pin" style="--x:52.6%;--y:36.3%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Tapez le prénom, puis le nom, et appuyez sur la touche <kbd>Entrée</kbd> du clavier. Le curseur revient tout seul sur « Prénom » pour l'élève suivant.</li>
+      <li><span class="pin">2</span>Chaque élève saisi s'affiche ici. Une erreur ? Cliquez sur la petite croix ✕.</li>
+      <li><span class="pin">3</span>Quand la liste est complète, cliquez sur <strong>« Enregistrer… »</strong>.</li>
+    </ol>
+
+    <h3>Façon n° 3 : inviter les élèves</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/09-inviter.jpg" alt="Onglet Inviter : code de classe K7QM4P, QR code et boutons pour copier le code ou le lien">
+        <span class="pin" style="--x:66%;--y:32%">1</span>
+        <span class="pin" style="--x:66%;--y:47%">2</span>
+        <span class="pin" style="--x:52.6%;--y:65.7%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Le <strong>code de la classe</strong>, à écrire au tableau.</li>
+      <li><span class="pin">2</span>Ou le <strong>QR code</strong>, à projeter : les élèves le visent avec leur téléphone et arrivent directement sur la page d'inscription.</li>
+      <li><span class="pin">3</span>Les boutons « Copier… » permettent de coller le code ou le lien dans un message de l'ENT.</li>
+    </ol>
+    <div class="tip box text"><strong>Bon à savoir</strong><p>Un élève qui s'inscrit avec exactement le même prénom et le même nom que dans votre liste (accents compris) est automatiquement rattaché à sa fiche. Vous pouvez donc combiner la façon n° 1 et l'invitation.</p></div>
+
+    <h3>Votre liste d'élèves</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/06-eleves-liste.jpg" alt="Liste des élèves avec une barre de recherche et la mention compte lié ou sans compte">
+        <span class="pin" style="--x:22.3%;--y:13.5%">1</span>
+        <span class="pin" style="--x:80.3%;--y:66.4%">2</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Une <strong>barre de recherche</strong> apparaît dès que la classe compte plus de 8 élèves.</li>
+      <li><span class="pin">2</span><strong>« compte lié »</strong> : l'élève a créé son compte et verra ses copies publiées. <strong>« sans compte »</strong> : pas encore.</li>
+    </ol>
+    <p class="text">Pour corriger l'orthographe d'un nom, passez la souris sur la ligne de l'élève : un bouton <strong>« Renommer »</strong> apparaît à droite.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="step" id="evaluation">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">5</span><h2>Préparer une évaluation et son barème</h2></div>
+    <p class="goal text">Sur la page de la classe, descendez jusqu'à « Évaluations », puis cliquez sur <strong>« + Nouvelle évaluation »</strong>.</p>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/10-nouvelle-evaluation.jpg" alt="Deux formulaires côte à côte : Avec l'IA à gauche, À partir de mon sujet à droite">
+        <span class="pin" style="--x:23%;--y:41%">1</span>
+        <span class="pin" style="--x:23%;--y:60.3%">2</span>
+        <span class="pin" style="--x:59%;--y:30.7%">3</span>
+        <span class="pin" style="--x:59%;--y:72.2%">4</span>
+      </div>
+    </figure>
+    <p class="text">Deux possibilités :</p>
+    <ol class="how text">
+      <li><span class="pin">1</span><strong>Avec l'IA :</strong> décrivez en une phrase le sujet et les notions évaluées. Indiquez le total de points et la durée.</li>
+      <li><span class="pin">2</span>Cliquez sur <strong>« Générer énoncé + barème »</strong> (2 crédits). Patientez quelques secondes.</li>
+      <li><span class="pin">3</span><strong>À partir de votre propre sujet :</strong> donnez un titre et collez votre énoncé.</li>
+      <li><span class="pin">4</span>Cliquez sur <strong>« Créer »</strong>. C'est gratuit, et l'IA peut ensuite vous proposer un barème, gratuitement lui aussi.</li>
+    </ol>
+
+    <h3>Vérifier le barème</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/12-evaluation-haut.jpg" alt="Page de l'évaluation : énoncé et barème détaillé critère par critère avec les points">
+        <span class="pin" style="--x:40.5%;--y:18.3%">1</span>
+        <span class="pin" style="--x:23.2%;--y:47.5%">2</span>
+        <span class="pin" style="--x:96%;--y:47.5%">3</span>
+        <span class="pin" style="--x:85.5%;--y:30%">4</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span><strong>« Barème figé »</strong> : le barème est verrouillé. L'IA corrigera toutes les copies avec exactement les mêmes critères.</li>
+      <li><span class="pin">2</span>Chaque <strong>critère</strong>, avec en gris ce qui est attendu de l'élève, et en noir la compétence travaillée.</li>
+      <li><span class="pin">3</span>Les <strong>points</strong> de chaque critère.</li>
+      <li><span class="pin">4</span><strong>« Dégeler »</strong> permet de modifier le barème, tant qu'aucune copie n'a été corrigée.</li>
+    </ol>
+    <div class="key box text"><strong>À retenir</strong><p>Prenez une minute pour relire le barème avant de corriger : c'est lui qui guide l'IA. Un barème précis donne des propositions de correction précises.</p></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="step" id="copies">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">6</span><h2>Déposer les copies</h2></div>
+    <p class="goal text">Plus bas sur la page de l'évaluation, la partie « Copies » sert à envoyer les copies de vos élèves : une photo ou un fichier PDF par copie.</p>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/13-copies.jpg" alt="Partie Copies : bouton scanner avec mon téléphone, choix de l'élève, choix du fichier, et tableau de suivi des copies">
+        <span class="pin" style="--x:23.8%;--y:13.1%">1</span>
+        <span class="pin" style="--x:23.8%;--y:20%">2</span>
+        <span class="pin" style="--x:23.8%;--y:26.6%">3</span>
+        <span class="pin" style="--x:23.8%;--y:38.3%">4</span>
+        <span class="pin" style="--x:58.6%;--y:12.1%">5</span>
+        <span class="pin" style="--x:58.6%;--y:21.8%">6</span>
+      </div>
+    </figure>
+    <p class="text"><strong>Depuis l'ordinateur</strong>, si les copies sont déjà scannées :</p>
+    <ol class="how text">
+      <li><span class="pin">2</span>Choisissez l'élève dans la liste déroulante.</li>
+      <li><span class="pin">3</span>Cliquez sur « Sélect. fichiers » et choisissez la ou les pages de sa copie.</li>
+      <li><span class="pin">4</span>Cliquez sur <strong>« Enregistrer la copie »</strong>. Recommencez pour chaque élève.</li>
+    </ol>
+    <p class="text"><strong>Lancer la correction :</strong></p>
+    <ol class="how text">
+      <li><span class="pin">5</span>Choisissez <strong>« Analyse rapide »</strong> (1 crédit par copie), qui suffit dans la plupart des cas, ou <strong>« Approfondie »</strong> (2 crédits), conseillée pour les écritures difficiles à lire.</li>
+      <li><span class="pin">6</span>Cliquez sur <strong>« Analyser… »</strong>. Toutes les copies déposées sont corrigées d'un coup.</li>
+    </ol>
+    <div class="warn box text"><strong>Attention</strong><p>Évitez de photographier le nom de l'élève : Copia n'en a pas besoin. Pour protéger vos élèves, aucun nom n'est jamais transmis à l'IA.</p></div>
+
+    <h3>Avec votre téléphone (pratique pour une pile de copies papier)</h3>
+    <div class="duo">
+      <div>
+        <ol class="how">
+          <li><span class="pin">1</span>Sur l'ordinateur, cliquez sur <strong>« 📱 Scanner avec mon téléphone »</strong>. Un QR code s'affiche.</li>
+          <li><span class="pin">2</span>Ouvrez l'appareil photo de votre téléphone et visez le QR code, comme pour prendre une photo. Touchez le lien qui apparaît.</li>
+          <li><span class="pin">3</span>Sur le téléphone, choisissez l'élève, photographiez chaque page de sa copie, puis touchez « Enregistrer la copie ».</li>
+        </ol>
+        <div class="tip box"><strong>Astuce</strong><p>Le lien reste valable 2 heures et ne nécessite aucune connexion sur le téléphone. Prenez les photos à plat, dans une pièce bien éclairée.</p></div>
+      </div>
+      <figure class="shot" style="margin:0">
+        <div class="phone"><img src="images/22-scan-telephone.jpg" alt="Écran du téléphone : choix de l'élève, ajout des photos et bouton Enregistrer la copie"></div>
+        <figcaption style="text-align:center">Ce que vous voyez sur le téléphone.</figcaption>
+      </figure>
+    </div>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/15-scan-qr.jpg" alt="Le QR code affiché sur l'ordinateur après avoir cliqué sur Scanner avec mon téléphone">
+        <span class="pin" style="--x:24%;--y:11%">1</span>
+      </div>
+      <figcaption>Le QR code à viser avec le téléphone.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="step" id="valider">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">7</span><h2>Vérifier, valider, publier</h2></div>
+    <p class="goal text">C'est l'étape la plus importante : <strong>l'IA propose, vous décidez</strong>. Aucune note n'est visible par l'élève sans votre accord.</p>
+
+    <h3>Le tableau des copies</h3>
+    <p class="text">En bas de la partie « Copies », chaque élève a une ligne avec l'état de sa copie :</p>
+    <ul class="text">
+      <li><strong>Pas de copie</strong> : rien n'a encore été déposé.</li>
+      <li><strong>Déposée</strong> : la copie attend d'être analysée.</li>
+      <li><strong style="color:var(--ochre)">À valider</strong> : l'IA a fait une proposition. C'est à vous de jouer : cliquez sur « Valider ».</li>
+      <li><strong style="color:var(--sage)">Validée</strong> : vous avez vérifié la correction. L'élève ne la voit pas encore.</li>
+      <li><strong>Publiée</strong> : l'élève voit sa note et vos commentaires.</li>
+    </ul>
+
+    <h3>Vérifier une copie</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/16-copie-validation.jpg" alt="Page d'une copie : la copie manuscrite à gauche, la proposition de l'IA à droite avec les points et un commentaire pour chaque critère">
+        <span class="pin" style="--x:24.5%;--y:33.6%">1</span>
+        <span class="pin" style="--x:60%;--y:29.5%">2</span>
+        <span class="pin" style="--x:62.8%;--y:18.4%">3</span>
+        <span class="pin" style="--x:86%;--y:33.3%">4</span>
+        <span class="pin" style="--x:62.4%;--y:45%">5</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>À gauche, <strong>la copie de l'élève</strong>, pour comparer.</li>
+      <li><span class="pin">2</span>À droite, <strong>la proposition de l'IA</strong>, critère par critère.</li>
+      <li><span class="pin">3</span>Le <strong>niveau de confiance</strong> de l'IA. S'il est « faible » (écriture peu lisible, par exemple), relisez avec une attention particulière.</li>
+      <li><span class="pin">4</span>Les <strong>points</strong> proposés : cliquez dans la case pour les modifier.</li>
+      <li><span class="pin">5</span>Le <strong>commentaire</strong> destiné à l'élève : vous pouvez le réécrire librement.</li>
+    </ol>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/17-copie-criteres.jpg" alt="Bas de la page : retour général à l'élève et bouton Valider la correction">
+        <span class="pin" style="--x:61.3%;--y:83.5%">1</span>
+        <span class="pin" style="--x:61.3%;--y:94%">2</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Relisez le <strong>retour général</strong>, rédigé avec bienveillance et en commençant par un point fort.</li>
+      <li><span class="pin">2</span>Cliquez sur <strong>« Valider la correction »</strong>. La note est calculée et la copie passe à « Validée ».</li>
+    </ol>
+
+    <h3>Publier les notes</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/13-copies.jpg" alt="Le bouton Publier les copies validées et les notes entourées au stylo rouge dans le tableau">
+        <span class="pin" style="--x:58.6%;--y:28.2%">1</span>
+        <span class="pin" style="--x:65.6%;--y:58.8%">2</span>
+        <span class="pin" style="--x:88.1%;--y:49.7%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Quand vous êtes prêt, cliquez sur <strong>« Publier … copie(s) validée(s) »</strong> : toutes les copies validées deviennent visibles par les élèves.</li>
+      <li><span class="pin">2</span>Les notes apparaissent entourées, comme au stylo rouge.</li>
+      <li><span class="pin">3</span>Il reste des copies « À valider » ? Le lien <strong>« Valider »</strong> vous y emmène directement.</li>
+    </ol>
+    <div class="key box text"><strong>À retenir</strong><p>Valider ne publie pas. Vous pouvez donc corriger tranquillement toute la pile, puis publier toutes les notes en même temps, au moment choisi.</p></div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="step" id="suivi">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">8</span><h2>Suivre les élèves et les faire progresser</h2></div>
+    <p class="goal text">Chaque correction validée enrichit le suivi des compétences. Copia vous aide ensuite à proposer le bon exercice au bon élève.</p>
+
+    <h3>La carte des compétences de la classe</h3>
+    <p class="text">En bas de la page de la classe :</p>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/11-carte-competences.jpg" alt="Tableau élèves par compétences avec des pastilles rouges, ocre et vertes">
+        <span class="pin" style="--x:74.3%;--y:38.2%">1</span>
+        <span class="pin" style="--x:22.5%;--y:71.5%">2</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>La légende : <strong>À besoins</strong> (rouge), <strong>Fragile</strong> (ocre), <strong>Satisfaisante</strong> (vert). Passez la souris sur une pastille pour lire son libellé.</li>
+      <li><span class="pin">2</span>Une ligne par élève, une colonne par compétence. D'un coup d'œil, on voit qui a besoin d'aide, et sur quoi.</li>
+    </ol>
+
+    <h3>La fiche d'un élève</h3>
+    <p class="text">Cliquez sur le nom d'un élève pour ouvrir sa fiche.</p>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/18-fiche-eleve.jpg" alt="Fiche de l'élève Hugo Bernard : compétences, appréciation, copies et suivi dans le temps">
+        <span class="pin" style="--x:24.2%;--y:29.8%">1</span>
+        <span class="pin" style="--x:78.4%;--y:30.5%">2</span>
+        <span class="pin" style="--x:24.2%;--y:68.2%">3</span>
+        <span class="pin" style="--x:58.6%;--y:68.2%">4</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Le niveau de l'élève dans chaque compétence.</li>
+      <li><span class="pin">2</span><strong>L'appréciation de bulletin :</strong> écrivez-la vous-même, ou cliquez sur « Proposer » (1 crédit) pour obtenir un brouillon. Terminez par « Valider l'appréciation ».</li>
+      <li><span class="pin">3</span>Toutes ses copies.</li>
+      <li><span class="pin">4</span>L'évolution de ses résultats dans le temps.</li>
+    </ol>
+
+    <h3>Les exercices de remédiation</h3>
+    <p class="text">Depuis la page de la classe, cliquez sur <strong>« Exercices de remédiation → »</strong>.</p>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/20-exercices.jpg" alt="Page des exercices de remédiation : un exercice assigné à quatre élèves, et les formulaires pour en générer ou en créer">
+        <span class="pin" style="--x:69.6%;--y:26%">1</span>
+        <span class="pin" style="--x:24.3%;--y:26%">2</span>
+        <span class="pin" style="--x:24.3%;--y:45.1%">3</span>
+        <span class="pin" style="--x:24.3%;--y:63%">4</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span><strong>« Générer un exercice » :</strong> indiquez la compétence ciblée et la difficulté de 1 à 5 (1 crédit). Vous pouvez aussi l'écrire vous-même dans « Créer à la main » (gratuit).</li>
+      <li><span class="pin">2</span>L'exercice, avec deux indices et une solution que l'élève ne voit pas.</li>
+      <li><span class="pin">3</span>Choisissez à qui le donner (par exemple tous les élèves « à besoins » ou « fragiles »), puis cliquez sur <strong>« Assigner »</strong>.</li>
+      <li><span class="pin">4</span>Suivez où en est chaque élève. Quand un élève a répondu, sa ligne passe à <strong>« Rendu »</strong> : cliquez sur <strong>« Corriger par l'IA »</strong> (1 crédit) ou sur <strong>« Corriger moi-même »</strong>. La correction met à jour la carte des compétences.</li>
+    </ol>
+
+    <h3>Adapter un sujet (DYS, PAP)</h3>
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/14-dys.jpg" alt="Partie Adaptation DYS / PAP : cases à cocher des besoins, niveau d'intensité et bouton Générer une variante">
+        <span class="pin" style="--x:23.8%;--y:65.5%">1</span>
+        <span class="pin" style="--x:23.8%;--y:72.5%">2</span>
+        <span class="pin" style="--x:23.8%;--y:80.5%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>En bas de la page d'une évaluation, cochez les besoins concernés (dyslexie, TDAH…).</li>
+      <li><span class="pin">2</span>Choisissez le niveau d'accompagnement, de 1 (mise en page plus lisible) à 3 (accompagnement maximal).</li>
+      <li><span class="pin">3</span>Cliquez sur <strong>« Générer une variante »</strong> (2 crédits). Le niveau d'exigence et le total de points restent les mêmes, et rien sur la feuille n'indique qu'elle est adaptée.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="step" id="eleve">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">9</span><h2>Ce que voient vos élèves</h2></div>
+    <p class="goal text">Vos élèves se connectent sur le même site, avec leur propre compte. Leur espace est simple et pensé pour le téléphone.</p>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/23-eleve-accueil.jpg" alt="Accueil de l'élève Léa : ses résultats, ses exercices à faire et ses compétences">
+        <span class="pin" style="--x:70%;--y:31.5%">1</span>
+        <span class="pin" style="--x:67.4%;--y:59.5%">2</span>
+        <span class="pin" style="--x:23.6%;--y:73.4%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Ses <strong>notes publiées</strong>. Seules les copies que vous avez publiées apparaissent.</li>
+      <li><span class="pin">2</span>Les <strong>exercices</strong> que vous lui avez assignés.</li>
+      <li><span class="pin">3</span>Son niveau dans chaque compétence.</li>
+    </ol>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/24-eleve-copie.jpg" alt="Copie corrigée vue par l'élève : note entourée, retour général et détail de chaque critère">
+        <span class="pin" style="--x:23%;--y:32.2%">1</span>
+        <span class="pin" style="--x:23%;--y:47.6%">2</span>
+        <span class="pin" style="--x:23%;--y:62.5%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>La note.</li>
+      <li><span class="pin">2</span>Votre retour général.</li>
+      <li><span class="pin">3</span>Le détail des points et de vos commentaires, critère par critère.</li>
+    </ol>
+
+    <figure class="shot">
+      <div class="frame">
+        <img src="images/25-eleve-exercice.jpg" alt="Exercice vu par l'élève : énoncé, deux indices repliés et zone de réponse">
+        <span class="pin" style="--x:23%;--y:47.8%">1</span>
+        <span class="pin" style="--x:23%;--y:80%">2</span>
+        <span class="pin" style="--x:23%;--y:93.3%">3</span>
+      </div>
+    </figure>
+    <ol class="how text">
+      <li><span class="pin">1</span>Deux <strong>indices</strong>, que l'élève ouvre seulement s'il en a besoin.</li>
+      <li><span class="pin">2</span>Il écrit sa réponse…</li>
+      <li><span class="pin">3</span>… puis il l'envoie. Sa réponse apparaît comme « Rendu » dans votre page des exercices, où vous la corrigez.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="step" id="credits">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">10</span><h2>Comprendre les crédits</h2></div>
+    <div class="duo">
+      <div>
+        <p class="goal">Chaque action de l'IA consomme quelques crédits. Le coût est toujours affiché sur le bouton avant de cliquer, par exemple <span class="chip" style="padding:2px 10px;font-size:15px">1 cr.</span>.</p>
+        <ul>
+          <li>Tout ce que vous faites <strong>à la main est gratuit</strong> : créer une évaluation, saisir des notes, écrire un commentaire.</li>
+          <li>Proposer un barème est <strong>offert</strong>.</li>
+          <li>Si une action de l'IA échoue, <strong>les crédits sont automatiquement rendus</strong>.</li>
+          <li>Votre solde est visible en bas à gauche de chaque page. Cliquez dessus pour voir le détail.</li>
+        </ul>
+        <div class="tip box"><strong>Repère</strong><p>Avec 250 crédits, on peut par exemple corriger environ 200 copies en analyse rapide et préparer une dizaine d'évaluations.</p></div>
+      </div>
+      <figure class="shot narrow" style="margin:0">
+        <div class="frame"><img src="images/21-compte.jpg" alt="Solde de crédits et tableau du coût de chaque action"></div>
+        <figcaption>La page « Compte &amp; crédits ».</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- Aide -->
+<section class="step" id="aide">
+  <div class="wrap">
+    <div class="step-head"><span class="step-num">?</span><h2>En cas de souci</h2></div>
+    <p class="goal text">Les situations les plus courantes, et comment s'en sortir.</p>
+    <div class="text">
+      <details class="faq"><summary>Je n'ai pas reçu l'e-mail de confirmation.</summary><div>Regardez dans le dossier « Courrier indésirable » ou « Spam » de votre messagerie. Vérifiez aussi l'adresse saisie : en cas d'erreur, recréez votre compte avec la bonne adresse.</div></details>
+      <details class="faq"><summary>La connexion indique « Adresse non confirmée ».</summary><div>Vous n'avez pas encore cliqué sur le lien de l'e-mail de confirmation. Ouvrez cet e-mail, cliquez sur le lien, puis reconnectez-vous.</div></details>
+      <details class="faq"><summary>J'ai ajouté un élève en double ou avec une faute.</summary><div>Copia empêche les doublons exacts. Pour une faute d'orthographe, passez la souris sur la ligne de l'élève et cliquez sur « Renommer ».</div></details>
+      <details class="faq"><summary>La génération par l'IA affiche une erreur.</summary><div>Le service d'IA est peut-être momentanément surchargé. Attendez une minute et recommencez. Vos crédits ont été rendus automatiquement. Si le problème persiste, prévenez la personne qui gère Copia dans votre établissement.</div></details>
+      <details class="faq"><summary>La note proposée par l'IA me semble fausse.</summary><div>C'est précisément pour cela que vous validez chaque copie. Modifiez les points et le commentaire directement sur la page de la copie, puis cliquez sur « Valider la correction ». Votre version remplace celle de l'IA.</div></details>
+      <details class="faq"><summary>Le QR code ne fonctionne pas avec mon téléphone.</summary><div>Ouvrez l'application Appareil photo, visez le QR code et attendez 2 secondes qu'un lien apparaisse, puis touchez-le. Le lien expire au bout de 2 heures : cliquez de nouveau sur « Scanner avec mon téléphone » pour en obtenir un nouveau.</div></details>
+      <details class="faq"><summary>Un élève ne voit pas sa copie.</summary><div>Vérifiez deux choses : la copie est-elle « Publiée » (et pas seulement « Validée ») ? Et la mention « compte lié » apparaît-elle à côté du nom de l'élève dans la liste de la classe ?</div></details>
+      <details class="faq"><summary>Je ne retrouve plus une page.</summary><div>Cliquez sur « Tableau de bord » en haut à gauche : vous retrouverez vos classes et vos évaluations récentes. Le lien gris « ← … » en haut de chaque page ramène à la page précédente.</div></details>
+    </div>
+
+    <h3>Les 5 règles d'or</h3>
+    <ul class="rules">
+      <li><b>L'IA propose, vous décidez.</b>Chaque correction passe par votre validation.</li>
+      <li><b>Rien n'est public sans vous.</b>Les élèves ne voient que ce que vous avez publié.</li>
+      <li><b>Le barème d'abord.</b>Un barème soigné donne des corrections justes.</li>
+      <li><b>Pas de nom sur les photos.</b>Copia n'en a pas besoin, et vos élèves restent protégés.</li>
+      <li><b>Pensez à vous déconnecter</b>sur un ordinateur partagé (salle des professeurs, CDI) : cliquez sur « Sortir », en bas à gauche.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">Copia<span class="dot">.</span> · Guide de prise en main pour les enseignants · Les captures montrent une classe fictive : les noms des élèves sont inventés.</div>
+</footer>
+
+<dialog class="zoom" aria-label="Image agrandie">
+  <img alt="">
+  <button type="button">Fermer</button>
+</dialog>
+<script>
+  // Agrandit une capture au clic, se ferme avec Échap, le bouton ou un clic sur le fond
+  const zoom = document.querySelector("dialog.zoom");
+  const zoomImg = zoom.querySelector("img");
+  document.querySelectorAll(".frame, .phone").forEach((frame) => {
+    const img = frame.querySelector("img");
+    frame.tabIndex = 0;
+    frame.setAttribute("role", "button");
+    frame.setAttribute("aria-label", "Agrandir : " + img.alt);
+    const open = () => { zoomImg.src = img.src; zoomImg.alt = img.alt; zoom.showModal(); };
+    frame.addEventListener("click", open);
+    frame.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  });
+  zoom.querySelector("button").addEventListener("click", () => zoom.close());
+  zoom.addEventListener("click", (e) => { if (e.target === zoom) zoom.close(); });
+</script>
+</body>
+</html>

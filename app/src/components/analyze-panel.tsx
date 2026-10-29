@@ -31,7 +31,7 @@ export function AnalyzePanel({ copyIds }: { copyIds: string[] }) {
     router.refresh();
   }
 
-  if (copyIds.length === 0) return <p className="text-sm text-slate-500">Aucune copie en attente d&apos;analyse.</p>;
+  if (copyIds.length === 0) return <p className="text-sm text-ink-mute">Aucune copie en attente d&apos;analyse.</p>;
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-4 text-sm">
@@ -46,11 +46,11 @@ export function AnalyzePanel({ copyIds }: { copyIds: string[] }) {
         {running ? "Analyse en cours…" : `Analyser ${copyIds.length} copie(s)`}
       </Button>
       {progress && (
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-ink-soft">
           {progress.done} analysée(s){progress.failed > 0 && `, ${progress.failed} en échec (crédits restitués)`} sur {copyIds.length}.
         </p>
       )}
-      {lastError && <p className="text-sm text-red-700">{lastError}</p>}
+      {lastError && <p className="text-sm text-pen">{lastError}</p>}
     </div>
   );
 }

@@ -19,11 +19,10 @@ export default async function ScanPage({ params }: { params: Promise<{ token: st
   ]);
   const done = new Set((copies ?? []).filter((c) => c.file_paths.length > 0).map((c) => c.student_id));
   return (
-    <main className="mx-auto max-w-md space-y-4 p-4">
-      <h1 className="text-xl font-bold">{evaluation?.title}</h1>
-      <p className="text-sm text-slate-600">Choisissez l&apos;élève, photographiez chaque page de sa copie, puis enregistrez.</p>
+    <main className="mx-auto min-h-dvh max-w-md px-4 pb-24">
       <ScanUploader
         token={token}
+        title={evaluation?.title ?? "Évaluation"}
         students={(students ?? []).map((s) => ({ id: s.id, label: `${s.first_name} ${s.last_name.charAt(0)}.`, done: done.has(s.id) }))}
       />
     </main>

@@ -6,6 +6,7 @@ import { fail, ok, type ActionState } from "@/lib/action-state";
 import { requireRole } from "@/lib/auth";
 import { getAccount } from "@/lib/credits";
 import { generateJoinCode } from "@/lib/rules";
+import { rowKey } from "@/lib/roster";
 
 const PRO_MAX_CLASSES = 3;
 const MAX_JOIN_CODE_ATTEMPTS = 5;
@@ -39,23 +40,41 @@ export async function createClass(_: ActionState, formData: FormData): Promise<A
   return fail("Création impossible, réessayez.");
 }
 
-// Ajout en lot : une ligne par élève « Prénom Nom »
-export async function addStudents(classId: string, _: ActionState, formData: FormData): Promise<ActionState> {
+const studentRowSchema = z.object({
+  first_name: z.string().trim().min(1).max(60),
+  last_name: z.string().trim().max(80),
+});
+const MAX_STUDENTS_PER_BATCH = 60;
+
+// Ajout en lot depuis le panneau (saisie ou liste collée) ; doublons ignorés côté serveur
+export async function addStudentsBatch(classId: string, rows: { first_name: string; last_name: string }[]): Promise<{ added?: number; skipped?: number; error?: string }> {
   const { supabase, user } = await requireRole("teacher");
-  const rows = String(formData.get("names") ?? "")
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .slice(0, 60)
-    .map((line) => {
-      const [first, ...rest] = line.split(/\s+/);
-      return { class_id: classId, teacher_id: user.id, first_name: first.slice(0, 60), last_name: rest.join(" ").slice(0, 80) };
-    });
-  if (rows.length === 0) return fail("Saisissez au moins un élève.");
-  const { error } = await supabase.from("students").insert(rows);
-  if (error) return fail("Ajout impossible.");
+  const parsed = z.array(studentRowSchema).min(1).max(MAX_STUDENTS_PER_BATCH).safeParse(rows);
+  if (!parsed.success) return { error: "Chaque élève doit avoir au moins un prénom." };
+  const { data: existing } = await supabase.from("students").select("first_name,last_name").eq("class_id", classId);
+  const seen = new Set((existing ?? []).map(rowKey));
+  const fresh = parsed.data.filter((r) => {
+    const key = rowKey(r);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  if (fresh.length > 0) {
+    const { error } = await supabase.from("students").insert(fresh.map((r) => ({ ...r, class_id: classId, teacher_id: user.id })));
+    if (error) return { error: "Ajout impossible." };
+  }
   revalidatePath(`/app/classes/${classId}`);
-  return ok(`${rows.length} élève(s) ajouté(s).`);
+  return { added: fresh.length, skipped: parsed.data.length - fresh.length };
+}
+
+export async function renameStudent(studentId: string, row: { first_name: string; last_name: string }): Promise<{ error?: string }> {
+  const { supabase } = await requireRole("teacher");
+  const parsed = studentRowSchema.safeParse(row);
+  if (!parsed.success) return { error: "Prénom requis." };
+  const { data, error } = await supabase.from("students").update(parsed.data).eq("id", studentId).select("class_id").single();
+  if (error || !data) return { error: "Modification impossible." };
+  revalidatePath(`/app/classes/${data.class_id}`);
+  return {};
 }
 
 // Retrait de la classe : distinct de l'effacement RGPD (qui supprime tout)

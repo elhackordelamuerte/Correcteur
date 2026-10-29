@@ -31,16 +31,16 @@ export function RubricEditor({ action, title, statement, total, initial }: Props
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <h3 className="font-medium">Barème</h3>
-          <span className={`text-sm font-medium ${balanced ? "text-emerald-700" : "text-amber-700"}`}>
+          <span className={`text-sm font-medium ${balanced ? "text-sage" : "text-ochre"}`}>
             Somme : {sum.toLocaleString("fr-FR")} / {total} {balanced ? "✓" : "— doit égaler le total"}
           </span>
         </div>
         {rows.map((r, i) => (
-          <div key={i} className="grid gap-2 rounded-lg border border-slate-200 p-3 md:grid-cols-12">
+          <div key={i} className="grid gap-2 rounded-lg border border-line p-3 md:grid-cols-12">
             <input className={`${inputClass} md:col-span-4`} name="label" placeholder="Critère" value={r.label} onChange={(e) => update(i, "label", e.target.value)} />
             <input className={`${inputClass} md:col-span-3`} name="competency" placeholder="Compétence" value={r.competency} onChange={(e) => update(i, "competency", e.target.value)} />
             <input className={`${inputClass} md:col-span-2`} name="points" placeholder="Points" inputMode="decimal" value={r.points} onChange={(e) => update(i, "points", e.target.value)} />
-            <button type="button" className="text-sm text-red-600 md:col-span-3 md:text-right" onClick={() => setRows(rows.filter((_, j) => j !== i))}>Retirer</button>
+            <button type="button" className="text-sm text-pen md:col-span-3 md:text-right" onClick={() => setRows(rows.filter((_, j) => j !== i))}>Retirer</button>
             <input className={`${inputClass} md:col-span-12`} name="expected" placeholder="Attendu pour obtenir tous les points" value={r.expected} onChange={(e) => update(i, "expected", e.target.value)} />
           </div>
         ))}
@@ -48,8 +48,8 @@ export function RubricEditor({ action, title, statement, total, initial }: Props
       </div>
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={pending}>{pending ? "Enregistrement…" : "Enregistrer"}</Button>
-        {state?.error && <p className="text-sm text-red-700">{state.error}</p>}
-        {state?.ok && <p className="text-sm text-emerald-700">{state.ok}</p>}
+        {state?.error && <p className="text-sm text-pen">{state.error}</p>}
+        {state?.ok && <p className="text-sm text-sage">{state.ok}</p>}
       </div>
     </form>
   );

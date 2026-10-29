@@ -11,11 +11,11 @@ export default async function VariantPrintPage({ params }: { params: Promise<{ i
   if (!variant) notFound();
   const content = variant.content as { statement: string; criteria: { label: string; points: number }[] };
   return (
-    <article className="mx-auto max-w-3xl bg-white p-8">
+    <article className="mx-auto max-w-3xl bg-sheet p-8">
       <div className="no-print mb-6"><PrintButton /></div>
       <h1 className="mb-6 text-2xl font-bold">{(variant.evaluations as { title: string }).title}</h1>
       <p className="prose-copia text-lg leading-loose">{content.statement}</p>
-      <ul className="mt-8 border-t pt-4 text-sm text-slate-600">
+      <ul className="mt-8 border-t pt-4 text-sm text-ink-soft">
         {content.criteria.map((c) => <li key={c.label}>{c.label} — {formatPoints(c.points)} pt</li>)}
       </ul>
     </article>

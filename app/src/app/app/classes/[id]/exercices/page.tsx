@@ -33,9 +33,9 @@ export default async function ExercisesPage({ params }: { params: Promise<{ id: 
               <Card key={ex.id} title={ex.title} actions={<span className="flex gap-2"><Badge tone="blue">{(ex.competencies as { label: string } | null)?.label ?? "Sans compétence"}</Badge><Badge>Difficulté {ex.difficulty}/5</Badge></span>}>
                 <p className="prose-copia text-sm">{ex.statement}</p>
                 <details className="mt-2 text-sm">
-                  <summary className="cursor-pointer text-slate-600">Indices et solution</summary>
+                  <summary className="cursor-pointer text-ink-soft">Indices et solution</summary>
                   <ol className="ml-5 mt-2 list-decimal">{(ex.hints as string[]).map((h) => <li key={h}>{h}</li>)}</ol>
-                  <p className="prose-copia mt-2 text-slate-600">{ex.solution}</p>
+                  <p className="prose-copia mt-2 text-ink-soft">{ex.solution}</p>
                 </details>
                 <ActionForm action={assignExercise.bind(null, ex.id)} submitLabel="Assigner" variant="secondary" className="mt-4 flex flex-wrap items-center gap-3">
                   <select name="target" className={`${inputClass} w-auto`}>
@@ -44,7 +44,7 @@ export default async function ExercisesPage({ params }: { params: Promise<{ id: 
                   </select>
                 </ActionForm>
                 {assignments.length > 0 && (
-                  <ul className="mt-4 divide-y divide-slate-100 text-sm">
+                  <ul className="mt-4 divide-y divide-line text-sm">
                     {assignments.map((a) => (
                       <li key={a.id} className="space-y-2 py-3">
                         <div className="flex justify-between">
@@ -53,8 +53,8 @@ export default async function ExercisesPage({ params }: { params: Promise<{ id: 
                           {a.status === "submitted" && <Badge tone="amber">Rendu</Badge>}
                           {a.status === "corrected" && <Badge tone="green">Corrigé {a.corrected_by === "ai" ? "(IA)" : ""} · {Math.round(Number(a.ratio) * 100)} %</Badge>}
                         </div>
-                        {a.answer && <p className="rounded bg-slate-50 p-2 text-slate-700">{a.answer}</p>}
-                        {a.feedback && <p className="text-slate-600">↳ {a.feedback}</p>}
+                        {a.answer && <p className="rounded bg-paper p-2 text-ink">{a.answer}</p>}
+                        {a.feedback && <p className="text-ink-soft">↳ {a.feedback}</p>}
                         {a.status === "submitted" && (
                           <div className="flex flex-wrap items-start gap-4">
                             <ActionForm action={aiCorrectAssignment.bind(null, a.id)} submitLabel={<>Corriger par l&apos;IA <Cost credits={CREDIT_COSTS.exerciseCorrection} /></>} variant="secondary" />
